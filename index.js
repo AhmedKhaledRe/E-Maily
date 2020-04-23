@@ -1,9 +1,28 @@
 const express = require('express');
 const app = express();
-const passport = require('passport');
-const GoogleStartegy = require('passport-google-oauth20').Strategy;
+const mongoose = require('mongoose');
+const keys = require('./config/keys');
 const port = process.env.PORT || 5000;
 
-passport.use(new GoogleStartegy());
+// mongoose.connect(keys.mongoURI);
+
+/* 
+const MongoClient = require('mongodb').MongoClient;
+const client = new MongoClient(keys.mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
+client.connect(err => {});
+*/
+
+mongoose
+    .connect(keys.mongoURI, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
+    .then(() => {
+        console.log("Connection succed!");
+    })
+    .catch(() => {
+        console.log("Connection failed!");
+    });
+
+require('./routes/authRoutes');
+require('./routes/authRoutes')(app);
+require('./services/passport');
 
 app.listen(port, () => console.log(`listening on http://localhost:${port}`));
