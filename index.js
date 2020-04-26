@@ -23,6 +23,7 @@ mongoose
 
 require('./routes/authRoutes');
 require('./routes/authRoutes')(app);
+require('./models/User');
 require('./services/passport');
 
 app.listen(port, () => console.log(`listening on http://localhost:${port}`));
