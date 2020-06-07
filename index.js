@@ -6,6 +6,11 @@ const passport = require('passport');
 const keys = require('./config/keys');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
+const cors = require('cors');
+
+require('./models/User');
+require('./models/Survey');
+require('./services/passport');
 
 // mongoose.connect(keys.mongoURI);
 
@@ -29,17 +34,27 @@ app.use(cookieSession({
     keys: [keys.cookieKey]
 }));
 
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+    );
+    res.setHeader(
+        "Access-Control-Allow-Methods",
+        "GET, POST, PATCH, PUT, DELETE, OPTIONS"
+    );
+    next();
+});
+app.use(cors());
+
 app.use(bodyParser.json());
 app.use(passport.initialize());
 app.use(passport.session());
 
-require('./routes/authRoutes');
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
 require('./routes/surveyRoutes')(app);
-require('./models/User');
-require('./models/Survey');
-require('./services/passport');
 
 if (process.env.NODE_ENV === 'production') {
     // Express will serve up production assets
