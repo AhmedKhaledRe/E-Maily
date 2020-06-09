@@ -20,6 +20,9 @@ const client = new MongoClient(keys.mongoURI, { useNewUrlParser: true, useUnifie
 client.connect(err => {});
 */
 
+
+mongoose.Promise = global.Promise;
+
 mongoose
     .connect(keys.mongoURI, { useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true })
     .then(() => {
@@ -29,12 +32,12 @@ mongoose
         console.log("Connection failed!");
     });
 
+app.use(bodyParser.json());
 app.use(cookieSession({
     maxAge: 30 * 24 * 60 * 60 * 1000,
     keys: [keys.cookieKey]
 }));
-
-app.use((req, res, next) => {
+/* app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader(
         "Access-Control-Allow-Headers",
@@ -47,8 +50,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use(cors());
-
-app.use(bodyParser.json());
+*/
 app.use(passport.initialize());
 app.use(passport.session());
 
