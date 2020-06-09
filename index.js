@@ -6,7 +6,6 @@ const passport = require('passport');
 const keys = require('./config/keys');
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 5000;
-const cors = require('cors');
 
 require('./models/User');
 require('./models/Survey');
